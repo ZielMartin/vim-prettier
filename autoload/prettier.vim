@@ -57,9 +57,19 @@ function! prettier#Prettier(...) abort
   let l:partialFormat = a:0 > 3 && a:4 ? a:4 : 0
   let l:partialFormatEnabled = l:hasSelection && l:partialFormat
 
+
+  let l:fileExtension = expand("%:e")
+  let l:extensionsToFormatAsHtml = ["xml", "xsd"]
+
   let l:overWrite = a:0 > 4 ? a:5 : {}
   let l:bufferConfig = getbufvar(bufnr('%'), 'prettier_ft_default_args', {})
   let l:config = extend(l:bufferConfig, l:overWrite)
+
+  if index(l:extensionsToFormatAsHtml, fileExtension) >= 0
+    " format as html
+    "
+    l:config = extend(l:config, '--parser html')
+    echo l:config
 
   if l:execCmd != -1
     " TODO
